@@ -21,7 +21,7 @@ struct Msg{
 
 fn send_failure(who: &str, why: &str){
     let resp_headers = vec![(String::from("content-type"), String::from("text/html"))];
-    send_response(200, resp_headers, format!("Your {} is in valid. Reason: \n{}", who, why).as_bytes().to_vec());
+    send_response(200, resp_headers, format!("Your {} is in valid. Reason: \n{}\n", who, why).as_bytes().to_vec());
 }
 
 async fn handler(headers: Vec<(String, String)>, _qry: HashMap<String, Value>, body: Vec<u8>) {
@@ -34,7 +34,7 @@ async fn handler(headers: Vec<(String, String)>, _qry: HashMap<String, Value>, b
         send_response(
             500, 
             vec![(String::from("content-type"), String::from("text/html"))],
-            String::from("Cannot resolve request body.").as_bytes().to_vec()
+            String::from("Cannot resolve request body.\n").as_bytes().to_vec()
         );
         return;
     }
@@ -58,6 +58,6 @@ async fn handler(headers: Vec<(String, String)>, _qry: HashMap<String, Value>, b
     send_response(
         200, 
         vec![(String::from("content-type"), String::from("text/html"))], 
-        String::from("vlidation success.").as_bytes().to_vec()
+        String::from("vlidation success.\n").as_bytes().to_vec()
     );
 }
