@@ -1,22 +1,44 @@
-# Getting started with a simple flow function
+# A Flows.network API
 
-This flow function exposes a HTTP endpoint. You can submit any data to the endpoint via HTTP POST and the flow function will echo it back to you in the HTTP response.
+## Introduction
 
-1. Fork this repo into your own GitHub account.
-2. Go to [Flows.network](https://flows.network/flow/new) to create a new flow.
-3. Import the forked repo from your account into flows.network.
-4. Build and deploy.
-5. You will now get a URL endpoint to access the flow function. It is under the *Lambda Endpoint* section on the flows.network web site. You can test it as follows.
+This API is designed for validating a password.
 
-The example below shows how to query a flow function we have already deployed.
-You can type the following URL into any browser's address bar:
+Following are implemented rules:
 
+- Password's length must be equal or greater than 5;
+- Password can only and must contain letters (upper/lowercase) and decimal digits
+- Username cannot be part of Password
+
+## Usage
+
+Following is the API URL:
+
+<https://code.flows.network/lambda/fhARrkEOXD>
+
+You can serialize the username and password as a JSON string and pass it in request body like this:
+
+```bash
+curl -d '{"username":"xyz", "password":"+==123456qwerQWER"}' https://code.flows.network/lambda/fhARrkEOXD
 ```
-https://code.flows.network/lambda/j4DPFGufPr?msg=I+am+a+Rustacean
-```
 
-Or, you can use the `curl` command to access the flow function.
+There are some example usage
 
-```
-curl https://code.flows.network/lambda/j4DPFGufPr?msg=I+am+a+Rustacean
+```bash
+$ curl -d '{"username":"xyz", "password":}' https://code.flows.network/lambda/fhARrkEOXD
+Cannot resolve request body.
+$ curl -d '{"username":"xyz", "password":"123456qwerQWER"}' https://code.flows.network/lambda/fhARrkEOXD
+vlidation success.
+$ curl -d '{"username":"xyz", "password":"qwerQWER"}' https://code.flows.network/lambda/fhARrkEOXD
+Your password is in valid. Reason: 
+Password must contain A-Z, a-z, and 0-9 to be complex enough.
+$ curl -d '{"username":"xyz", "password":"123QWER"}' https://code.flows.network/lambda/fhARrkEOXD
+Your password is in valid. Reason: 
+Password must contain A-Z, a-z, and 0-9 to be complex enough.
+$ curl -d '{"username":"xyz", "password":"+==123456qwerQWER"}' https://code.flows.network/lambda/fhARrkEOXD
+Your password is in valid. Reason: 
+Password can only contain A-Z, a-z or 0-9.
+$ curl -d '{"username":"xyz", "password":"xyz123QWER"}' https://code.flows.network/lambda/fhARrkEOXD
+Your password and username is in valid. Reason: 
+Username cannot be part of password.
 ```
